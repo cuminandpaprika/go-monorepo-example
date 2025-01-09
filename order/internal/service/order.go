@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
-	"connectrpc.com/connect"
 	orderv1alpha1 "github.com/cuminandpaprika/go-monorepo-example/gen/order/v1alpha1"
 )
 
@@ -20,6 +20,15 @@ func NewOrderService() *OrderService {
 }
 
 func (s *OrderService) CreateOrder(ctx context.Context, order *orderv1alpha1.Order) (*orderv1alpha1.Order, error) {
+	if s == nil {
+		log.Println("OrderService is nil")
+		return nil, errors.New("OrderService is nil")
+	}
+	if order == nil {
+		log.Println("Order is nil")
+		return nil, errors.New("order is nil")
+	}
+	log.Printf("Creating order with ID: %s", order.Id)
 	if order.Id == "" {
 		return nil, errors.New("order ID is required")
 	}
@@ -27,37 +36,20 @@ func (s *OrderService) CreateOrder(ctx context.Context, order *orderv1alpha1.Ord
 		return nil, fmt.Errorf("order with ID %s already exists", order.Id)
 	}
 	s.orders[order.Id] = order
+	log.Printf("Order with ID: %s created successfully", order.Id)
 	return order, nil
 }
 
 func (s *OrderService) GetOrder(ctx context.Context, id string) (*orderv1alpha1.Order, error) {
+	if s == nil {
+		log.Println("OrderService is nil")
+		return nil, errors.New("OrderService is nil")
+	}
+	log.Printf("Fetching order with ID: %s", id)
 	order, exists := s.orders[id]
 	if !exists {
 		return nil, fmt.Errorf("order with ID %s not found", id)
 	}
+	log.Printf("Order with ID: %s fetched successfully", id)
 	return order, nil
-}
-
-type OrderServiceHandler struct {
-	service *OrderService
-}
-
-func NewOrderServiceHandler(service *OrderService) *OrderServiceHandler {
-	return &OrderServiceHandler{service: service}
-}
-
-func (h *OrderServiceHandler) CreateOrder(ctx context.Context, req *connect.Request[orderv1alpha1.CreateOrderRequest]) (*connect.Response[orderv1alpha1.CreateOrderResponse], error) {
-	order, err := h.service.CreateOrder(ctx, req.Msg.Order)
-	if err != nil {
-		return nil, connect.NewError(connect.CodeInternal, err)
-	}
-	return connect.NewResponse(&orderv1alpha1.CreateOrderResponse{Order: order}), nil
-}
-
-func (h *OrderServiceHandler) GetOrder(ctx context.Context, req *connect.Request[orderv1alpha1.GetOrderRequest]) (*connect.Response[orderv1alpha1.GetOrderResponse], error) {
-	order, err := h.service.GetOrder(ctx, req.Msg.Id)
-	if err != nil {
-		return nil, connect.NewError(connect.CodeNotFound, err)
-	}
-	return connect.NewResponse(&orderv1alpha1.GetOrderResponse{Order: order}), nil
 }
