@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package order.v1alpha1;
+
+message FoodItem {
+    string name = 1;
+    int32 quantity = 2;
+    int64 price = 3;
+}
+
+message Customer {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+    string phone = 4;
+}
+
+message Order {
+    string id = 1;
+    Customer customer = 2;
+    repeated FoodItem items = 3;
+    int64 total_price = 4;
+    string status = 5;
+}
