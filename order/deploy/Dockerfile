@@ -1,5 +1,5 @@
-FROM golang:1.21
+FROM alpine
 WORKDIR /app
-ADD go.mod go.sum ./
-RUN go install ./
-ENTRYPOINT tilt-example-go
+ADD order/web web
+ADD build build
+ENTRYPOINT build/order

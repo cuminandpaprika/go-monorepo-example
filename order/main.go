@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -23,6 +24,7 @@ func NewExampleRouter() *ExampleRouter {
 }
 
 func main() {
+	fmt.Println("hello world! Fast")
 	http.Handle("/", NewExampleRouter())
 
 	log.Println("Serving on port 8000")
