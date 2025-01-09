@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kitchen
+  labels:
+    app: kitchen
+spec:
+  selector:
+    matchLabels:
+      app: kitchen
+  template:
+    metadata:
+      labels:
+        app: kitchen
+    spec:
+      containers:
+      - name: kitchen
+        image: kitchen-image
+        ports:
+        - containerPort: 8000
