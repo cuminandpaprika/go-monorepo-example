@@ -12,7 +12,7 @@ local_resource(
   )
   
 docker_build_with_restart(
-  'example-go-image',
+  'order-image',
   '.',
   entrypoint=['/app/build/order'],
   dockerfile='order/deploy/Dockerfile',
@@ -27,4 +27,4 @@ docker_build_with_restart(
 )
 
 k8s_yaml('order/deploy/k8s.yaml')
-k8s_resource('example-go', port_forwards=8000, resource_deps=['order-local-bin'])
+k8s_resource('order', port_forwards=8000, resource_deps=['order-local-bin'])
