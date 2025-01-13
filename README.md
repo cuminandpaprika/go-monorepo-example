@@ -1,5 +1,11 @@
 # go-monorepo-example
 
+## Example repo structure for go monorepo
+
+Uses 
+- Tilt for a local development environment.
+- Buf for protobuf file codegen
+
 ## Curl
 ```
 curl -X POST http://localhost:8000/order.v1alpha1.OrderService/CreateOrder \
