@@ -11,6 +11,11 @@ Uses
 buf generate
 ```
 
+## run
+```
+tilt up
+```
+
 ## Curl
 ```
 curl -X POST http://localhost:8000/order.v1alpha1.OrderService/CreateOrder \
