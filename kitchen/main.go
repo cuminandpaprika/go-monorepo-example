@@ -3,8 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+
+	kitchenpb "github.com/cuminandpaprika/go-monorepo-example/gen/kitchen/v1alpha1"
+	"github.com/cuminandpaprika/go-monorepo-example/kitchen/internal/service"
 	"github.com/gorilla/mux"
 )
 
@@ -25,11 +31,18 @@ func NewExampleRouter() *ExampleRouter {
 
 func main() {
 	fmt.Println("hello world! Kitchen service")
-	http.Handle("/", NewExampleRouter())
 
-	log.Println("Serving on port 8000")
-	err := http.ListenAndServe(":8000", nil)
+	lis, err := net.Listen("tcp", ":8000")
 	if err != nil {
-		log.Fatalf("Server exited with: %v", err)
+		log.Fatalf("Failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer()
+	kitchenpb.RegisterKitchenServiceServer(s, service.New())
+	reflection.Register(s)
+
+	log.Println("Serving gRPC on port 8000")
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("Failed to serve: %v", err)
 	}
 }
