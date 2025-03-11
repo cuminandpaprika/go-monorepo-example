@@ -32,7 +32,7 @@ func NewExampleRouter() *ExampleRouter {
 func main() {
 	fmt.Println("hello world! Kitchen service")
 
-	lis, err := net.Listen("tcp", ":8000")
+	lis, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
@@ -41,7 +41,7 @@ func main() {
 	kitchenpb.RegisterKitchenServiceServer(s, service.New())
 	reflection.Register(s)
 
-	log.Println("Serving gRPC on port 8000")
+	log.Println("Serving gRPC on port 8080")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}

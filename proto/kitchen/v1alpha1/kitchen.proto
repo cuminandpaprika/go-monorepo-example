@@ -25,7 +25,17 @@ message PrepareFoodResponse {
   string message = 2;
 }
 
+message OrderFoodRequest {
+  repeated FoodItem items = 1;
+}
+
+message OrderFoodResponse {
+  string status = 1;
+  string message = 2;
+}
+
 service KitchenService {
   rpc CookFood(CookFoodRequest) returns (CookFoodResponse);
   rpc PrepareFood(PrepareFoodRequest) returns (PrepareFoodResponse);
+  rpc OrderFood(OrderFoodRequest) returns (OrderFoodResponse);
 }
