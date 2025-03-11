@@ -6,6 +6,11 @@ Uses
 - Tilt for a local development environment.
 - Buf for protobuf file codegen
 
+## generate protobuf
+```
+buf generate
+```
+
 ## Curl
 ```
 curl -X POST http://localhost:8000/order.v1alpha1.OrderService/CreateOrder \

@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package kitchen.v1alpha1;
+
+message FoodItem {
+  string name = 1;
+  int32 quantity = 2;
+}
+
+message CookFoodRequest {
+  repeated FoodItem items = 1;
+}
+
+message CookFoodResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message PrepareFoodRequest {
+  repeated FoodItem items = 1;
+}
+
+message PrepareFoodResponse {
+  string status = 1;
+  string message = 2;
+}
+
+service KitchenService {
+  rpc CookFood(CookFoodRequest) returns (CookFoodResponse);
+  rpc PrepareFood(PrepareFoodRequest) returns (PrepareFoodResponse);
+}
