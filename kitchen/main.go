@@ -6,12 +6,14 @@ import (
 	"net"
 	"net/http"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
-
 	kitchenpb "github.com/cuminandpaprika/go-monorepo-example/gen/kitchen/v1alpha1"
 	"github.com/cuminandpaprika/go-monorepo-example/kitchen/internal/service"
+
 	"github.com/gorilla/mux"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	healthgrpc "google.golang.org/grpc/health/grpc_health_v1"
+	"google.golang.org/grpc/reflection"
 )
 
 type ExampleRouter struct {
@@ -38,6 +40,9 @@ func main() {
 	}
 
 	s := grpc.NewServer()
+	healthcheck := health.NewServer()
+	healthcheck.SetServingStatus("kitchenpb.KitchenService", healthgrpc.HealthCheckResponse_SERVING)
+	healthgrpc.RegisterHealthServer(s, healthcheck)
 	kitchenpb.RegisterKitchenServiceServer(s, service.New())
 	reflection.Register(s)
 
@@ -45,4 +50,5 @@ func main() {
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("Failed to serve: %v", err)
 	}
+
 }
