@@ -41,7 +41,8 @@ func main() {
 
 	s := grpc.NewServer()
 	healthcheck := health.NewServer()
-	healthcheck.SetServingStatus("kitchenpb.KitchenService", healthgrpc.HealthCheckResponse_SERVING)
+	healthcheck.SetServingStatus("", healthgrpc.HealthCheckResponse_SERVING)
+	healthcheck.SetServingStatus("KitchenService", healthgrpc.HealthCheckResponse_SERVING)
 	healthgrpc.RegisterHealthServer(s, healthcheck)
 	kitchenpb.RegisterKitchenServiceServer(s, service.New())
 	reflection.Register(s)

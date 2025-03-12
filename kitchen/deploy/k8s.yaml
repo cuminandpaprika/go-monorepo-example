@@ -18,6 +18,15 @@ spec:
         image: kitchen-image
         ports:
         - containerPort: 8080
+        livenessProbe:
+          grpc:
+            port: 8080
+          initialDelaySeconds: 1
+        readinessProbe:
+          grpc:
+            port: 8080
+            service: KitchenService
+          initialDelaySeconds: 1
 
 ---
 apiVersion: v1
